@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
  * global variable. Always create a new client within each function when using
  * it.
  */
+export const dynamic = "force-dynamic";
 export async function createClient() {
   const cookieStore = await cookies();
 
@@ -20,7 +21,7 @@ export async function createClient() {
         setAll(cookiesToSet) {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options),
+              cookieStore.set(name, value, options)
             );
           } catch {
             // The `setAll` method was called from a Server Component.
@@ -29,6 +30,6 @@ export async function createClient() {
           }
         },
       },
-    },
+    }
   );
 }
