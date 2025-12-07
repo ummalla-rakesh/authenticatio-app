@@ -31,6 +31,7 @@ export default function CourseForm({ onSaved }: { onSaved?: () => void }) {
       method: "POST",
       body: JSON.stringify(body),
       headers: { "Content-Type": "application/json" },
+      cache: "no-store",
     });
     const json = await res.json();
     setLoading(false);

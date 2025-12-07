@@ -7,6 +7,7 @@ import { cookies } from "next/headers";
  * it.
  */
 export const dynamic = "force-dynamic";
+
 export async function createClient() {
   const cookieStore = await cookies();
 

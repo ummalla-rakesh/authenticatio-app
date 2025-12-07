@@ -8,7 +8,7 @@ export default function AdminCoursesPage() {
   const [courses, setCourses] = useState<Course[]>([]);
 
   async function load() {
-    const res = await fetch("/api/courses");
+    const res = await fetch("/api/courses", { cache: "no-store" });
     const json = await res.json();
     setCourses(json?.data || []);
   }

@@ -46,6 +46,7 @@ export default function AuthCallbackHandler() {
               headers: { "Content-Type": "application/json" },
               credentials: "same-origin",
               body: JSON.stringify({ access_token, refresh_token }),
+              cache: "no-store",
             });
 
             if (res.ok) {

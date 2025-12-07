@@ -1,0 +1,9 @@
+Migrations code to db
+    supabase migration new <migration-file-name>
+    add query inside the file manually.
+    
+    supabase db reset     // it will drop all tables including the data and set the db again with tables                
+
+
+Migrations form db to query.
+    supabase db diff -f <migration-file-name>
