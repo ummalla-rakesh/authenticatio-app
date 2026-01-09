@@ -1,14 +1,21 @@
 import Link from "next/link";
-import { Course } from "../lib/course";
+import Image from "next/image";
+import { Course } from "@/lib/course";
+import imagePlaceHolder from "@/public/assets/course-placeholder.png";
+import { isValidUrl } from "@/lib/utils";
 
 export default function CourseCard({ course }: { course: Course }) {
   return (
     <div className="border rounded-lg p-4 shadow-sm hover:shadow-md transition">
       <Link href={`/courses/${course.id}`} className="space-y-2 block">
-        <img
-          src={course.image_url || "/placeholder.png"}
+        <Image
+          src={
+            isValidUrl(course.image_url) ? course.image_url : imagePlaceHolder
+          }
           alt={course.title}
-          className="w-full h-40 object-cover rounded"
+          className="w-full h-45 object-cover rounded"
+          width={400}
+          height={250}
         />
         <h3 className="text-lg font-semibold">{course.title}</h3>
         <p className="text-sm text-muted-foreground">

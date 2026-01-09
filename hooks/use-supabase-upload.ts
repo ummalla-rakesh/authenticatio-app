@@ -48,6 +48,8 @@ type UseSupabaseUploadOptions = {
    * When set to false, an error is thrown if the object already exists. Defaults to `false`
    */
   upsert?: boolean
+
+  onUploadComplete?: (urls: string[]) => void
 }
 
 type UseSupabaseUploadReturn = ReturnType<typeof useSupabaseUpload>
@@ -61,6 +63,7 @@ const useSupabaseUpload = (options: UseSupabaseUploadOptions) => {
     maxFiles = 1,
     cacheControl = 3600,
     upsert = false,
+    onUploadComplete,
   } = options
 
   const [files, setFiles] = useState<FileWithPreview[]>([])
@@ -149,7 +152,11 @@ const useSupabaseUpload = (options: UseSupabaseUploadOptions) => {
       new Set([...successes, ...responseSuccesses.map((x) => x.name)])
     )
     setSuccesses(newSuccesses)
-
+    onUploadComplete?.(
+      newSuccesses.map((name) =>
+        !!path ? `${path}/${name}` : name
+      )
+    )
     setLoading(false)
   }, [files, path, bucketName, errors, successes])
 

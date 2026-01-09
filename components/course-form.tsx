@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { FileUpload } from "./FileUpload";
 
 export default function CourseForm({ onSaved }: { onSaved?: () => void }) {
   const [title, setTitle] = useState("");
@@ -7,23 +8,21 @@ export default function CourseForm({ onSaved }: { onSaved?: () => void }) {
   const [length, setLength] = useState("");
   const [topics, setTopics] = useState("");
   const [price, setPrice] = useState("0");
-  const [category, setCategory] = useState("");
-  const [image_url, setImageUrl] = useState("");
+  const [image_url, setImageUrl] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
+    // topics: topics
+    //   .split(",")
+    //   .map((s) => s.trim())
+    //   .filter(Boolean),
     const body = {
       title,
       description,
-      length,
-      topics: topics
-        .split(",")
-        .map((s) => s.trim())
-        .filter(Boolean),
+      duration: length,
       price: Number(price),
-      category,
       image_url,
     };
 
@@ -31,7 +30,6 @@ export default function CourseForm({ onSaved }: { onSaved?: () => void }) {
       method: "POST",
       body: JSON.stringify(body),
       headers: { "Content-Type": "application/json" },
-      cache: "no-store",
     });
     const json = await res.json();
     setLoading(false);
@@ -41,10 +39,10 @@ export default function CourseForm({ onSaved }: { onSaved?: () => void }) {
       setLength("");
       setTopics("");
       setPrice("0");
-      setCategory("");
-      setImageUrl("");
+      setImageUrl([]);
       onSaved?.();
-      alert("Course saved");
+      console.log("Course saved:", json);
+      alert("Course saved!");
     } else {
       alert(json?.error || "Failed");
     }
@@ -74,6 +72,7 @@ export default function CourseForm({ onSaved }: { onSaved?: () => void }) {
         <div>
           <label className="block text-sm font-medium">Length</label>
           <input
+            required
             value={length}
             onChange={(e) => setLength(e.target.value)}
             className="w-full p-2 border rounded"
@@ -83,6 +82,7 @@ export default function CourseForm({ onSaved }: { onSaved?: () => void }) {
         <div>
           <label className="block text-sm font-medium">Price</label>
           <input
+            required
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             className="w-full p-2 border rounded"
@@ -96,26 +96,22 @@ export default function CourseForm({ onSaved }: { onSaved?: () => void }) {
           Topics (comma separated)
         </label>
         <input
+          required
           value={topics}
           onChange={(e) => setTopics(e.target.value)}
           className="w-full p-2 border rounded"
         />
       </div>
-      <div>
-        <label className="block text-sm font-medium">Category</label>
-        <input
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="w-full p-2 border rounded"
-        />
-      </div>
+
       <div>
         <label className="block text-sm font-medium">Image URL</label>
-        <input
+        {/* <input
+          required
           value={image_url}
           onChange={(e) => setImageUrl(e.target.value)}
           className="w-full p-2 border rounded"
-        />
+        /> */}
+        <FileUpload onUploadComplete={setImageUrl} />
       </div>
       <div>
         <button

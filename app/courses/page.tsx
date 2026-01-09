@@ -2,32 +2,22 @@ import { createClient } from "../../lib/supabase/server";
 import CourseList from "../../components/course-list";
 import CourseFilters from "../../components/course-filters";
 import { normalizeCourse } from "../../lib/course";
+import { Suspense } from "react";
 
 export default async function CoursesPage() {
-  //     {
-  //   searchParams,
-  // }: {
-  //   searchParams?: any;
-  // }
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CoursesContent />
+    </Suspense>
+  );
+}
+
+async function CoursesContent() {
   const supabase = await createClient();
   const query = supabase
     .from("courses")
     .select("*")
-    .order("created_at", { ascending: false })
-    .limit(200);
-
-  //   const search = (await searchParams?.search) || "";
-  //   const category = (await searchParams?.category) || "";
-
-  //   if (search) {
-  //     query = query
-  //       .ilike("title", `%${search}%`)
-  //       .or(`description.ilike.%${search}%`);
-  //   }
-  //   if (category) {
-  //     query = query.eq("category", category);
-  //   }
-
+    .order("created_at", { ascending: false });
   const { data } = await query;
   const courses = (data || []).map(normalizeCourse);
 

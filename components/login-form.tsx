@@ -27,6 +27,8 @@ export function LoginForm({
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
+  console.log("login form");
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     const supabase = createClient();
@@ -51,6 +53,7 @@ export function LoginForm({
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
     setError(null);
+    console.log("login handler");
 
     try {
       const supabase = createClient();
@@ -58,6 +61,8 @@ export function LoginForm({
         provider: "google",
         options: { redirectTo: `${window.location.origin}/protected` },
       });
+      console.log("g auth data", data);
+
       if (error) throw error;
       if (data?.url) window.location.href = data.url;
     } catch (error: unknown) {

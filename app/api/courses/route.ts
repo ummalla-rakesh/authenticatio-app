@@ -54,16 +54,14 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    console.log("Received body:", body);
     const supabase = await createClient();
 
     const insert = {
       title: body.title,
       description: body.description,
-      length: body.length,
-      topics: body.topics,
+      duration: body.length,
+      tags: body.topics,
       price: body.price,
-      category: body.category || null,
       image_url: body.image_url || null,
     };
 
@@ -76,7 +74,7 @@ export async function POST(req: Request) {
     if (error)
       return NextResponse.json({ error: error.message }, { status: 500 });
 
-    return NextResponse.json({ data: normalizeCourse(data) });
+    return NextResponse.json({ data });
   } catch (err: any) {
     return NextResponse.json(
       { error: err.message || String(err) },
